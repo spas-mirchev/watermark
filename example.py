@@ -5,310 +5,322 @@ from PIL import Image, ImageTk, ImageDraw, ImageFont
 from tkinter import filedialog as fd
 
 
-class WrapAll:
+# def on_key(var, mode, callback):
+
+#     img = Image.new("RGBA", preview_image.size, (255, 255, 255, 0))
+
+#     draw = ImageDraw.Draw(img)
+
+#     font = ImageFont.truetype("DejaVuSerif-Bold.ttf", text_size.get())
+
+#     draw.text(
+#         (text_xcor.get(), text_ycor.get()),
+#         text=my_var.get(),
+#         font=font,
+#         fill=colour_var.get(),
+#     )
+
+#     out = Image.alpha_composite(preview_image, img)
+
+#     try:
+#         out1 = Image.alpha_composite(out, img1)
+
+#     except AttributeError:
+#         test1 = ImageTk.PhotoImage(out)
+#     else:
+#         test1 = ImageTk.PhotoImage(out1)
+#     canvas.itemconfigure(image_container, image=test1)
+
+
+# def add_logo():
+#     filetypes = (("image files", "*.png"),)
+#     filenames = fd.askopenfilenames(
+#         title="Open files", initialdir="./images", filetypes=filetypes
+#     )
+#     logo_image = Image.open(filenames[0]).convert("RGBA")
+#     logo_preview = logo_image.copy()
+
+#     adjust_logo()
+
+
+# def adjust_logo():
+#     logo_preview.thumbnail((text_size.get(), text_size.get()))
+#     im2 = Image.new("RGBA", logo_preview.size, (0, 0, 0, 0))
+#     blended = Image.blend(logo_preview, im2, alpha=logo_opacity.get())
+
+#     img1 = Image.new("RGBA", preview_image.size, (0, 0, 0, 0))
+#     img1.paste(blended, (x.get(), y.get()), blended)
+
+#     out1 = Image.alpha_composite(preview_image, img1)
+
+#     try:
+#         out2 = Image.alpha_composite(out, img1)
+#     except AttributeError:
+#         test = ImageTk.PhotoImage(out1)
+#     else:
+#         test = ImageTk.PhotoImage(out2)
+
+#     canvas.itemconfigure(`image_container`, image=test, tags="square")
+
+
+# def change_color():
+#     colors = askcolor(title="Tkinter Color Chooser")
+#     colour_var.set(colors[1])
+#     canvas.update()
+
+
+# def character_limit(my_var):
+#     if len(my_var.get()) > 0:
+#         my_var.set(my_var.get()[:15])
+
+
+# def opacity(value):
+#     if value == "20":
+#         colour_var.set((colors[1] + "33"))
+#         logo_opacity.set(0.6)
+#     elif value == "40":
+#         colour_var.set((colors[1] + "66"))
+#         logo_opacity.set(0.4)
+#     elif value == "60":
+#         colour_var.set((colors[1] + "99"))
+#         logo_opacity.set(0.25)
+#     elif value == "80":
+#         colour_var.set((colors[1] + "cc"))
+#         logo_opacity.set(0.1)
+#     else:
+#         colour_var.set((colors[1] + "ff"))
+#         logo_opacity.set(0.0)
+
+#     adjust_logo()
+#     on_key("a", "write", "")
+
+
+# def transform(var, preview_size, original_size):
+#     var.set(var.get() / preview_size * original_size)
+
+
+# def save_imagez(original):
+#     transform(text_xcor, preview_image.width, original.width)
+#     transform(text_ycor, preview_image.width, original.width)
+#     transform(text_size, preview_image.width, original.width)
+#     transform(x, preview_image.width, original.width)
+#     transform(y, preview_image.width, original.width)
+
+#     img = Image.new("RGBA", original.size, (255, 255, 255, 0))
+#     draw = ImageDraw.Draw(img)
+#     font = ImageFont.truetype("DejaVuSerif-Bold.ttf", text_size.get())
+
+#     draw.text(
+#         (text_xcor.get(), text_ycor.get()),
+#         text=my_var.get(),
+#         font=font,
+#         fill=colour_var.get(),
+#     )
+#     out = Image.alpha_composite(original, img)
+
+#     logo_image.thumbnail((text_size.get(), text_size.get()))
+#     transparent_layer = Image.new("RGBA", logo_image.size, (0, 0, 0, 0))
+
+#     blended = Image.blend(logo_image, transparent_layer, alpha=logo_opacity.get())
+
+#     original.paste(blended, (x.get(), y.get()), blended)
+
+#     try:
+#         original.save("opp.png")
+#     except AttributeError:
+#         out.save("opp.png")
+#     else:
+#         final = Image.alpha_composite(original, img)
+#         final.save("./watermark_images/oop3.png")
+
+#     # def save_original_images():
+#     #     for items in filenames:
+#     #         original_img = Image.open(items).convert("RGBA")
+#     #         save_imagez(original_img)
+
+
+# # def motion(event):
+# #     x.set(event.x)
+# #     print(x.get())
+# #     y.set(event.y)
+# #     adjust_logo()
+
+
+# def motion_text(event):
+#     text_xcor.set(event.x)
+#     text_ycor.set(event.y)
+#     on_key("", "", "")
+
+
+# def left(e):
+#     x.set(x.get() - 15)
+#     y.set(y.get())
+#     adjust_logo()
+
+
+# def right(e):
+#     x.set(x.get() + 15)
+#     y.set(y.get())
+#     adjust_logo()
+
+
+# def up(e):
+#     x.set(x.get())
+#     y.set(y.get() - 15)
+#     adjust_logo()
+
+
+# def down(e):
+#     x.set(x.get())
+#     y.set(y.get() + 15)
+#     adjust_logo()
+
+
+window = Tk()
+window.title("Add watermark to images")
+window.config(padx=10, pady=10)
+
+my_var = StringVar()
+x = IntVar(window, 0)
+y = IntVar(window, 0)
+text_xcor = IntVar(window, 0)
+text_ycor = IntVar(window, 0)
+aspect = IntVar(window, 1)
+text_size = IntVar(window, 60)
+logo_opacity = DoubleVar(window, 0.0)
+colour_var = StringVar(window, "#f0a00c20")
+
+canvas = Canvas(window, width=840, height=640)
+canvas.grid(row=0, column=0, rowspan=7)
+
+
+class WatermarkCreator:
     def __init__(self) -> None:
-
-        self.window = Tk()
-        self.window.title("Add watermark to images")
-        self.window.config(padx=10, pady=10)
-
-        self.my_var = StringVar()
-        self.x = IntVar(self.window, 0)
-        self.y = IntVar(self.window, 0)
-        self.text_xcor = IntVar(self.window, 0)
-        self.text_ycor = IntVar(self.window, 0)
-        self.aspect = IntVar(self.window, 1)
-        self.text_size = IntVar(self.window, 60)
-        self.logo_opacity = DoubleVar(self.window, 0.0)
-        self.colour_var = StringVar(self.window, "#f0a00c20")
-
-        self.canvas = Canvas(self.window, width=840, height=640)
-        self.canvas.grid(row=0, column=0, rowspan=7)
-
-        self.upload_img = Button(
-            width=50,
-            text="Upload image ",
-            font=("", 12),
-            command=self.select_files,
-        )
-        self.upload_img.grid(column=1, row=0, columnspan=4, padx=10, pady=10)
-
-        self.font_size = Label(text="Choose font size: ", font=("", 13))
-        self.font_size.grid(column=1, row=1)
-
-        self.choose_text_size = Scale(
-            from_=20,
-            to=60,
-            tickinterval=10,
-            orient=HORIZONTAL,
-            width=23,
-            length=300,
-            resolution=10,
-            command=lambda *args: self.text_size.set(self.choose_text_size.get()),
-        )
-
-        self.choose_text_size.grid(row=1, column=2, columnspan=3)
-
-        self.choose_color = Button(
-            text="Select text colour",
-            width=18,
-            font=("", 12),
-            command=self.change_color,
-        )
-        self.choose_color.grid(column=1, row=2)
-
-        self.opacity = Scale(
-            from_=20,
-            to=100,
-            tickinterval=20,
-            orient=HORIZONTAL,
-            width=23,
-            length=300,
-            resolution=20,
-            command=self.opacity,
-        )
-
-        self.opacity.grid(row=2, column=2, columnspan=3)
-
-        self.add_text = Label(text="Add watermark text: ", font=("", 13))
-        self.add_text.grid(column=1, row=3)
-
-        self.e_text = Entry(width=25, font=("Helvetica", 18), textvariable=self.my_var)
-        self.e_text.grid(column=2, row=3, columnspan=3)
-
-        self.my_var.trace("w", lambda *args: self.character_limit(self.my_var))
-
-        self.upload_image = Button(
-            text="Add logo image",
-            font=("Helvetica", 12),
-            width=20,
-            command=self.AddLogo,
-        )
-        self.upload_image.grid(column=1, row=4)
-
-        self.adjust = Label(
-            text="Adjust logo position with arrows", font=("Ariel.ttf", 13)
-        )
-        self.adjust.grid(column=2, row=4, columnspan=3)
-
-        self.save_image = Button(
-            width=50,
-            text="Save image ",
-            font=("Ariel.ttf", 12),
-            command=lambda: self.save_imagez(self.original_image),
-        )
-        self.save_image.grid(column=1, row=5, columnspan=4)
-
-        self.save_all = Button(
-            width=50,
-            text="Set automatically watermark to all images",
-            font=("Ariel.ttf", 12),
-            # command=self.save_original_images,
-        )
-        self.save_all.grid(column=1, row=6, columnspan=4)
-
-        self.my_var.trace_add("write", self.OnKey)
-
-        self.window.bind("<Left>", self.left)
-        self.window.bind("<Right>", self.right)
-        self.window.bind("<Up>", self.up)
-        self.window.bind("<Down>", self.down)
-        # self.canvas.bind("<B1-Motion>", self.motion)
-        self.canvas.bind("<B1-Motion>", self.motion_text)
-        self.window.mainloop()
-
-    # def save_imagez(self, d):
-    #     d.save("riba.png")
-
-    def select_files(self):
-        self.filetypes = (("image files", "*.jpg"), ("image files", "*.png"))
-        self.filenames = fd.askopenfilenames(
-            title="Open files", initialdir="./images", filetypes=self.filetypes
-        )
-        self.original_image = Image.open(self.filenames[0]).convert("RGBA")
-        self.make_preview()
-
-    def make_preview(self):
-        if self.original_image.width > 840:
-            self.aspect.set(round(self.original_image.width / 840))
-            print(self.aspect.get())
-        if self.original_image.height > 640:
-            self.aspect.set(round(self.original_image.height / 640))
-            print(self.aspect.get())
-
-        self.preview_image = self.original_image.copy().reduce(self.aspect.get())
-
-        if self.preview_image.width > 840 or self.preview_image.height > 640:
-            self.aspect.set(self.aspect.get() + 1)
-            self.preview_image = self.original_image.copy().reduce(self.aspect.get())
-            print(self.aspect.get())
-
-        self.test = ImageTk.PhotoImage(self.preview_image)
-
-        self.image_container = self.canvas.create_image(
-            0, 0, image=self.test, anchor=NW
-        )
-
-    def OnKey(self, var, mode, callback):
-
-        self.img = Image.new("RGBA", self.preview_image.size, (255, 255, 255, 0))
-
-        self.draw = ImageDraw.Draw(self.img)
-
-        self.font = ImageFont.truetype("DejaVuSerif-Bold.ttf", self.text_size.get())
-
-        self.draw.text(
-            (self.text_xcor.get(), self.text_ycor.get()),
-            text=self.my_var.get(),
-            font=self.font,
-            fill=self.colour_var.get(),
-        )
-
-        self.out = Image.alpha_composite(self.preview_image, self.img)
-
-        try:
-            self.out1 = Image.alpha_composite(self.out, self.img1)
-
-        except AttributeError:
-            self.test1 = ImageTk.PhotoImage(self.out)
-        else:
-            self.test1 = ImageTk.PhotoImage(self.out1)
-        self.canvas.itemconfigure(self.image_container, image=self.test1)
-
-    def AddLogo(self):
-        self.filetypes = (("image files", "*.png"),)
-        self.filenames = fd.askopenfilenames(
-            title="Open files", initialdir="./images", filetypes=self.filetypes
-        )
-        self.logo_image = Image.open(self.filenames[0]).convert("RGBA")
-        self.logo_preview = self.logo_image.copy()
-
-        self.AdjustLogo()
-
-    def AdjustLogo(self):
-        self.logo_preview.thumbnail((self.text_size.get(), self.text_size.get()))
-        self.im2 = Image.new("RGBA", self.logo_preview.size, (0, 0, 0, 0))
-        self.blended = Image.blend(
-            self.logo_preview, self.im2, alpha=self.logo_opacity.get()
-        )
-
-        self.img1 = Image.new("RGBA", self.preview_image.size, (0, 0, 0, 0))
-        self.img1.paste(self.blended, (self.x.get(), self.y.get()), self.blended)
-
-        self.out1 = Image.alpha_composite(self.preview_image, self.img1)
-
-        try:
-            self.out2 = Image.alpha_composite(self.out, self.img1)
-        except AttributeError:
-            self.test = ImageTk.PhotoImage(self.out1)
-        else:
-            self.test = ImageTk.PhotoImage(self.out2)
-
-        self.canvas.itemconfigure(self.image_container, image=self.test, tags="square")
-
-    def change_color(self):
-        self.colors = askcolor(title="Tkinter Color Chooser")
-        self.colour_var.set(self.colors[1])
-        self.canvas.update()
-
-    def character_limit(self, my_var):
-        if len(self.my_var.get()) > 0:
-            self.my_var.set(self.my_var.get()[:15])
-
-    def opacity(self, value):
-        if value == "20":
-            self.colour_var.set((self.colors[1] + "33"))
-            self.logo_opacity.set(0.6)
-        elif value == "40":
-            self.colour_var.set((self.colors[1] + "66"))
-            self.logo_opacity.set(0.4)
-        elif value == "60":
-            self.colour_var.set((self.colors[1] + "99"))
-            self.logo_opacity.set(0.25)
-        elif value == "80":
-            self.colour_var.set((self.colors[1] + "cc"))
-            self.logo_opacity.set(0.1)
-        else:
-            self.colour_var.set((self.colors[1] + "ff"))
-            self.logo_opacity.set(0.0)
-
-        self.AdjustLogo()
-        self.OnKey("a", "write", "")
-
-    def transform(self, var, preview_size, original_size):
-        var.set(var.get() / preview_size * original_size)
-
-    def save_imagez(self, original):
-        self.transform(self.text_xcor, self.preview_image.width, original.width)
-        self.transform(self.text_ycor, self.preview_image.width, original.width)
-        self.transform(self.text_size, self.preview_image.width, original.width)
-        self.transform(self.x, self.preview_image.width, original.width)
-        self.transform(self.y, self.preview_image.width, original.width)
-
-        self.img = Image.new("RGBA", original.size, (255, 255, 255, 0))
-        self.draw = ImageDraw.Draw(self.img)
-        self.font = ImageFont.truetype("DejaVuSerif-Bold.ttf", self.text_size.get())
-
-        self.draw.text(
-            (self.text_xcor.get(), self.text_ycor.get()),
-            text=self.my_var.get(),
-            font=self.font,
-            fill=self.colour_var.get(),
-        )
-        self.out = Image.alpha_composite(original, self.img)
-
-        self.logo_image.thumbnail((self.text_size.get(), self.text_size.get()))
-        self.transparent_layer = Image.new("RGBA", self.logo_image.size, (0, 0, 0, 0))
-
-        self.blended = Image.blend(
-            self.logo_image, self.transparent_layer, alpha=self.logo_opacity.get()
-        )
-
-        original.paste(self.blended, (self.x.get(), self.y.get()), self.blended)
-
-        try:
-            original.save("opp.png")
-        except AttributeError:
-            self.out.save("opp.png")
-        else:
-            self.final = Image.alpha_composite(original, self.img)
-            self.final.save("./watermark_images/oop3.png")
-
-        # def save_original_images(self):
-        #     for items in self.filenames:
-        #         self.original_img = Image.open(items).convert("RGBA")
-        #         self.save_imagez(self.original_img)
-
-    # def motion(self, event):
-    #     self.x.set(event.x)
-    #     print(self.x.get())
-    #     self.y.set(event.y)
-    #     self.AdjustLogo()
-
-    def motion_text(self, event):
-        self.text_xcor.set(event.x)
-        self.text_ycor.set(event.y)
-        self.OnKey("", "", "")
-
-    def left(self, e):
-        self.x.set(self.x.get() - 15)
-        self.y.set(self.y.get())
-        self.AdjustLogo()
-
-    def right(self, e):
-        self.x.set(self.x.get() + 15)
-        self.y.set(self.y.get())
-        self.AdjustLogo()
-
-    def up(self, e):
-        self.x.set(self.x.get())
-        self.y.set(self.y.get() - 15)
-        self.AdjustLogo()
-
-    def down(self, e):
-        self.x.set(self.x.get())
-        self.y.set(self.y.get() + 15)
-        self.AdjustLogo()
+        self.original_image = None
 
 
-WrapAll()
+watermark_creator = WatermarkCreator()
+
+
+def select_files(watermark_creator: WatermarkCreator):
+    filetypes = (("image files", "*.jpg"), ("image files", "*.png"))
+    filenames = fd.askopenfilenames(
+        title="Open files", initialdir="./images", filetypes=filetypes
+    )
+    original_image = Image.open(filenames[0]).convert("RGBA")
+    watermark_creator.original_image = original_image
+    make_preview(watermark_creator=watermark_creator)
+
+
+def make_preview(watermark_creator: WatermarkCreator):
+    if watermark_creator.original_image.width > 840:
+        aspect.set(round(watermark_creator.original_image.width / 840))
+        print(aspect.get())
+    if watermark_creator.original_image.height > 640:
+        aspect.set(round(watermark_creator.original_image.height / 640))
+        print(aspect.get())
+
+    preview_image = watermark_creator.original_image.copy().reduce(aspect.get())
+
+    if preview_image.width > 840 or preview_image.height > 640:
+        aspect.set(aspect.get() + 1)
+        preview_image = watermark_creator.original_image.copy().reduce(aspect.get())
+        print(aspect.get())
+
+    test = ImageTk.PhotoImage(preview_image)
+    print("test", test)
+    print("canvas", type(canvas))
+    image_container = canvas.create_image(0, 0, image=test, anchor=NW)
+    canvas.itemconfigure(image_container, image=test)
+
+
+upload_img = Button(
+    width=50,
+    text="Upload image ",
+    font=("", 12),
+    # command=select_files,
+    command=lambda: select_files(watermark_creator=watermark_creator),
+)
+upload_img.grid(column=1, row=0, columnspan=4, padx=10, pady=10)
+
+# font_size = Label(text="Choose font size: ", font=("", 13))
+# font_size.grid(column=1, row=1)
+
+# choose_text_size = Scale(
+#     from_=20,
+#     to=60,
+#     tickinterval=10,
+#     orient=HORIZONTAL,
+#     width=23,
+#     length=300,
+#     resolution=10,
+#     command=lambda *args: text_size.set(choose_text_size.get()),
+# )
+
+# choose_text_size.grid(row=1, column=2, columnspan=3)
+
+# choose_color = Button(
+#     text="Select text colour",
+#     width=18,
+#     font=("", 12),
+#     command=change_color,
+# )
+# choose_color.grid(column=1, row=2)
+
+# opacity = Scale(
+#     from_=20,
+#     to=100,
+#     tickinterval=20,
+#     orient=HORIZONTAL,
+#     width=23,
+#     length=300,
+#     resolution=20,
+#     command=opacity,
+# )
+
+# opacity.grid(row=2, column=2, columnspan=3)
+
+# add_text = Label(text="Add watermark text: ", font=("", 13))
+# add_text.grid(column=1, row=3)
+
+# e_text = Entry(width=25, font=("Helvetica", 18), textvariable=my_var)
+# e_text.grid(column=2, row=3, columnspan=3)
+
+# my_var.trace("w", lambda *args: character_limit(my_var))
+
+# upload_image = Button(
+#     text="Add logo image",
+#     font=("Helvetica", 12),
+#     width=20,
+#     command=add_logo,
+# )
+# upload_image.grid(column=1, row=4)
+
+adjust = Label(text="Adjust logo position with arrows", font=("Ariel.ttf", 13))
+adjust.grid(column=2, row=4, columnspan=3)
+
+save_image = Button(
+    width=50,
+    text="Save image ",
+    font=("Ariel.ttf", 12),
+    # command=lambda: save_imagez(original_image),
+)
+save_image.grid(column=1, row=5, columnspan=4)
+
+save_all = Button(
+    width=50,
+    text="Set automatically watermark to all images",
+    font=("Ariel.ttf", 12),
+    # command=save_original_images,
+)
+save_all.grid(column=1, row=6, columnspan=4)
+
+# my_var.trace_add("write", on_key)
+
+# window.bind("<Left>", left)
+# window.bind("<Right>", right)
+# window.bind("<Up>", up)
+# window.bind("<Down>", down)
+# # canvas.bind("<B1-Motion>", motion)
+# canvas.bind("<B1-Motion>", motion_text)
+window.mainloop()
