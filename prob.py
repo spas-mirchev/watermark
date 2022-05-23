@@ -262,9 +262,9 @@ class WrapAll:
         for items in self.filenames:
             self.original_image = Image.open(items).convert("RGBA")
             counter += 1
-            self.process(self.original_image, counter)
+            self.process(counter)
 
-    def process(self, ori, counter):
+    def process(self, counter):
         self.xcor = int(
             self.text_xcor.get() / self.preview_image.width * self.original_image.width
         )
@@ -298,21 +298,31 @@ class WrapAll:
 
         self.out = Image.alpha_composite(self.original_image, self.img)
 
-        self.logo_image.thumbnail((self.texts, self.texts))
-        self.transparent_layer = Image.new("RGBA", self.logo_image.size, (0, 0, 0, 0))
+        # self.logo_image.thumbnail((self.texts, self.texts))
+        # self.transparent_layer = Image.new("RGBA", self.logo_image.size, (0, 0, 0, 0))
 
-        self.blended = Image.blend(
-            self.logo_image, self.transparent_layer, alpha=self.logo_opacity.get()
-        )
+        # self.blended = Image.blend(
+        #     self.logo_image, self.transparent_layer, alpha=self.logo_opacity.get()
+        # )
 
-        self.original_image.paste(self.blended, (self.xx, self.yy), self.blended)
+        # self.original_image.paste(self.blended, (self.xx, self.yy), self.blended)
 
         try:
+            self.logo_image.thumbnail((self.texts, self.texts))
+            self.transparent_layer = Image.new(
+                "RGBA", self.logo_image.size, (0, 0, 0, 0)
+            )
+
+            self.blended = Image.blend(
+                self.logo_image, self.transparent_layer, alpha=self.logo_opacity.get()
+            )
+
+            self.original_image.paste(self.blended, (self.xx, self.yy), self.blended)
+        except AttributeError as error:
+            self.out.save(f"./watermark_images/watermark{counter}111.png")
+        else:
             self.final = Image.alpha_composite(self.original_image, self.img)
             self.final.save(f"./watermark_images/watermark{counter}.png")
-
-        except AttributeError as error:
-            print("oppa")
 
     def size_text(self, value):
         self.text_size.set(self.choose_text_size.get())
